@@ -1,0 +1,12 @@
+﻿{
+  "clientPrincipal": {
+    "identityProvider": "facebook",
+    "userId": "fb769cb684f2457ba58e27b470b795f2",
+    "userDetails": "mx.voloshin@gmail.com",
+    "userRoles": [
+      "admin",
+      "anonymous",
+      "authenticated"
+    ]
+  }
+}

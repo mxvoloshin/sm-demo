@@ -6,9 +6,18 @@
 
 <div class="main">
     <div class="top-row px-4">
-        <a href="http://blazor.net" target="_blank" class="ml-md-auto">About</a>
+        <AuthorizeView>
+            <Authorized>
+                Hello, @context.User.Identity.Name!
+                <a href="/.auth/logout?post_logout_redirect_uri=/">Log out</a>
+            </Authorized>
+            <NotAuthorized>
+                <a class="btn btn-md btn-social btn-facebook" href="/.auth/login/facebook">
+                    <span class="fa fa-facebook"></span> Sign in with Facebook
+                </a>
+            </NotAuthorized>
+        </AuthorizeView>
     </div>
-
     <div class="content px-4">
         @Body
     </div>
