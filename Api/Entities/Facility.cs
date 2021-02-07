@@ -1,9 +1,4 @@
-﻿using Microsoft.Azure.Cosmos.Table;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BlazorApp.Api.Entities
+﻿namespace BlazorApp.Api.Entities
 {
     public class Facility : BaseEntity
     {

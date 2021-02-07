@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BlazorApp.Api.Interfaces
+﻿namespace BlazorApp.Api.Interfaces
 {
     public interface ICloudStorageSettings
     {

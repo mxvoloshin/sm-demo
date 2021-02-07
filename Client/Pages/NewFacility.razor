@@ -1,5 +1,7 @@
 ﻿@using BlazorApp.Shared
+@using BlazorApp.Client.Models
 @inject HttpClient Http
+@inject NavigationManager NavigationManager
 
 @page "/newfacility"
 @attribute [Authorize(Roles = "admin")]
@@ -17,15 +19,22 @@
 </EditForm>
 
 @code {
-    private FacilityDto facility = new FacilityDto();
+    private FacilityModel facility = new FacilityModel();
 
     private async Task HandleValidSubmit()
     {
         try
         {
-            var result = await Http.PostAsJsonAsync<FacilityDto>("/api/NewFacility", facility);
+            var dto = new FacilityDto
+            {
+                Name = facility.Name,
+                Address = facility.Address
+            };
+
+            var result = await Http.PostAsJsonAsync<FacilityDto>("/api/NewFacility", dto);
+            NavigationManager.NavigateTo("facility");
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             Console.WriteLine(ex.ToString());
         }

@@ -1,0 +1,69 @@
+﻿@using BlazorApp.Shared
+@using System.Threading
+@using System.IO
+@using BlazorApp.Client.Extensions
+@using BlazorApp.Client.Models
+
+@inject HttpClient Http
+
+@page "/facility"
+@attribute [Authorize(Roles = "admin")]
+
+<div>
+    <InputFile OnChange="OnChange"/>
+    <img src="@facility.PictureUrl" width="300" />
+</div>
+
+<EditForm EditContext="editContext" OnValidSubmit="OnSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <ValidationMessage For="() => facility.Name" />
+        <InputText class="form-control" placeholder="Название объекта" @bind-Value="facility.Name" />
+    </div>
+    <div class="form-group">
+        <ValidationMessage For="() => facility.Address" />
+        <InputText class="form-control" placeholder="Адрес объекта" @bind-Value="facility.Address" />
+    </div>
+    
+    <button>Submit</button>
+</EditForm>
+
+@code {
+    private CancellationTokenSource cancellationTokenSource;
+    private EditContext editContext;
+    private FacilityModel facility;
+    private string imagePreview;
+
+    protected override void OnInitialized()
+    {
+        cancellationTokenSource = new CancellationTokenSource();
+        facility = new FacilityModel();
+        editContext = new EditContext(facility);
+    }
+
+    private async Task OnChange(InputFileChangeEventArgs eventArgs)
+    {
+        facility.Picture = eventArgs.File;
+        facility.PictureUrl = await facility.Picture.GetPreviewUrlAsync(300, cancellationTokenSource.Token);
+    }
+
+    private async Task OnSubmit()
+    {
+        var dto = new ImageDto
+        {
+            Name = facility.Picture.Name,
+            ContentType = facility.Picture.ContentType,
+            Content = await facility.Picture.GetResizedImageAsync(1000, cancellationTokenSource.Token)
+        };
+
+        var result = await Http.PostAsJsonAsync<ImageDto>("/api/UploadFacilityImage", dto);
+        facility.PictureUrl = await result.Content.ReadAsStringAsync(cancellationTokenSource.Token);
+    }
+
+    public void Dispose()
+    {
+        cancellationTokenSource.Cancel();
+    }
+}
