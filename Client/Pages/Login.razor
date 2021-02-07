@@ -1,0 +1,17 @@
+﻿
+@page "/login"
+
+<AuthorizeView>
+    <NotAuthorized>
+        <div class="d-flex flex-column flex-fill text-center p-4">
+            <div class="p-2">
+                <img src="logo.svg" />
+            </div>
+            <div class="p-2">
+                <a class="btn btn-md btn-social btn-facebook" href="/.auth/login/facebook">
+                    <span class="fa fa-facebook"></span> Sign in with Facebook
+                </a>
+            </div>
+        </div>
+    </NotAuthorized>
+</AuthorizeView>

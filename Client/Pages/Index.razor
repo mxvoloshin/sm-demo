@@ -1,6 +1,22 @@
 ﻿@page "/"
+@inject NavigationManager NavigationManager
 
-<h1>Hello, world!</h1>
+@code
+{
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthenticationStateTask { get; set; }
 
-Welcome to your new app. Updated.
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateTask;
 
+        if (authState?.User?.Identity is null || !authState.User.Identity.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("login");
+        }
+        else
+        {
+            NavigationManager.NavigateTo("dashboard");
+        }
+    }
+}
