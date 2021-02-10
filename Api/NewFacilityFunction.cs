@@ -13,6 +13,7 @@ using BlazorApp.Api.Repository;
 using BlazorApp.Shared;
 using BlazorApp.Api.Entities;
 using BlazorApp.Api.Services;
+using Shared.ImageWrapper;
 
 namespace BlazorApp.Api
 {
@@ -20,22 +21,26 @@ namespace BlazorApp.Api
     {
         private readonly IFacilityRepository _facilityRepository;
         private readonly IDateTimeService _dateTimeService;
+        private readonly IBlobService _blobService;
+        private readonly IImageProcessor _imageProcessor;
 
-        public NewFacilityFunction(IFacilityRepository facilityRepository, IDateTimeService dateTimeService)
+        public NewFacilityFunction(IFacilityRepository facilityRepository, IDateTimeService dateTimeService, IBlobService blobService, IImageProcessor imageProcessor)
         {
             _facilityRepository = facilityRepository;
             _dateTimeService = dateTimeService;
+            _blobService = blobService;
+            _imageProcessor = imageProcessor;
         }
 
         [FunctionName("NewFacility")]
-        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req, ILogger log)
+        public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req, ILogger log)
         {
             try
             {
                 var claims = req.GetClaimsPrincipal();
 
                 var requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-                var facility = JsonConvert.DeserializeObject<FacilityDto>(requestBody);
+                var facility = JsonConvert.DeserializeObject<NewFacilityDto>(requestBody);
 
                 var entity = new Facility
                 {
@@ -47,6 +52,14 @@ namespace BlazorApp.Api
                     CreatedBy = claims.ClientId(),
                     CreatedAt = _dateTimeService.CurrentUtcDateTime
                 };
+
+                if (facility.Image != null)
+                {
+                    var resizedImage = await _imageProcessor.CompressAsync(facility.Image.Content, 50);
+                    facility.Image.Content = resizedImage;
+                    var imageUri = await _blobService.UploadImageAsync(facility.Image);
+                    entity.PreviewUrl = imageUri.AbsoluteUri;
+                }
 
                 var result = await _facilityRepository.CreateAsync(entity);
 

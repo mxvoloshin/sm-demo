@@ -11,7 +11,7 @@
 
 <div>
     <InputFile OnChange="OnChange"/>
-    <img src="@facility.PictureUrl" width="300" />
+    <img src="@facility.PreviewUrl" width="300" />
 </div>
 
 <EditForm EditContext="editContext" OnValidSubmit="OnSubmit">
@@ -46,7 +46,7 @@
     private async Task OnChange(InputFileChangeEventArgs eventArgs)
     {
         facility.Picture = eventArgs.File;
-        facility.PictureUrl = await facility.Picture.GetPreviewUrlAsync(300, cancellationTokenSource.Token);
+        facility.PreviewUrl = await facility.Picture.GetPreviewUrlAsync(300, cancellationTokenSource.Token);
     }
 
     private async Task OnSubmit()
@@ -59,7 +59,7 @@
         };
 
         var result = await Http.PostAsJsonAsync<ImageDto>("/api/UploadFacilityImage", dto);
-        facility.PictureUrl = await result.Content.ReadAsStringAsync(cancellationTokenSource.Token);
+        facility.PreviewUrl = await result.Content.ReadAsStringAsync(cancellationTokenSource.Token);
     }
 
     public void Dispose()

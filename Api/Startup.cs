@@ -15,12 +15,12 @@ namespace BlazorApp.Api
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            builder.Services.AddSingleton<ICloudStorageSettings, AppSettings>();
-            builder.Services.AddSingleton<IDateTimeService, DateTimeService>();
+            builder.Services.AddScoped<ICloudStorageSettings, AppSettings>();
+            builder.Services.AddScoped<IDateTimeService, DateTimeService>();
 
-            builder.Services.AddSingleton<IFacilityRepository, FacilityRepository>();
-            builder.Services.AddSingleton<IBlobService, BlobService>();
-            builder.Services.AddSingleton<IImageProcessor, ImageProcessor>();
+            builder.Services.AddScoped<IFacilityRepository, FacilityRepository>();
+            builder.Services.AddScoped<IBlobService, BlobService>();
+            builder.Services.AddScoped<IImageProcessor, ImageProcessor>();
         }
     }
 }

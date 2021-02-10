@@ -1,0 +1,27 @@
+﻿@inherits FacilityCardBase
+
+<MatCard class="facility-card">
+    <MatCardContent>
+        <MatCardMedia Wide="true" ImageUrl="@Model.PreviewUrl"></MatCardMedia>
+        <div class="facility-card-content">
+            <MatHeadline6>
+                @Model.Name
+            </MatHeadline6>
+            <MatSubtitle2>
+                @Model.Address
+            </MatSubtitle2>
+        </div>
+    </MatCardContent>
+    <MatDivider />
+    <MatCardActions>
+        <MatCardActionButtons>
+            <MatButton>Read</MatButton>
+            <MatButton>Bookmark</MatButton>
+        </MatCardActionButtons>
+
+        <MatCardActionIcons>
+            <MatIconButton Icon="@MatIconNames.Favorite"></MatIconButton>
+            <MatIconButton Icon="@MatIconNames.Dashboard"></MatIconButton>
+        </MatCardActionIcons>
+    </MatCardActions>
+</MatCard>

@@ -6,6 +6,9 @@ namespace BlazorApp.Client.Models
 {
     public class FacilityModel
     {
+        private string _previewUrl;
+        public string Id { get; set; }
+
         [Required]
         public string Name { get; set; }
 
@@ -15,6 +18,10 @@ namespace BlazorApp.Client.Models
         [FileValidation(new[] { ".png", ".jpg" })]
         public IBrowserFile Picture { get; set; }
 
-        public string PictureUrl { get; set; }
+        public string PreviewUrl
+        {
+            get => string.IsNullOrEmpty(_previewUrl) ? @"empty-image.png" : _previewUrl;
+            set => _previewUrl = value;
+        }
     }
 }
