@@ -1,23 +1,24 @@
-﻿@inherits NewFacilityBase
+﻿@using BlazorApp.Client.Models
+@inherits NewFacilityBase
 
 @page "/newfacility"
 @attribute [Authorize(Roles = "admin")]
 
-<EditForm Model="@Facility" OnValidSubmit="@HandleValidSubmit">
+<EditForm class="mt-2" Model="@Facility" OnValidSubmit="@OnSubmitAsync" style="max-width: 600px">
     <DataAnnotationsValidator />
-
-    <div class="form-group col-12 col-sm-12 col-md-12 col-lg-8 col-xl-6">
-        <MatTextField class="form-control form-control-sm" Label="Название" @bind-Value="Facility.Name" />
+    <div class="mb-2">
+        <InputText class="form-control" placeholder="Название" @bind-Value="Facility.Name" />
         <ValidationMessage For="@(() => Facility.Name)" />
-
-        <MatTextField class="form-control form-control-sm" Label="Адрес" @bind-Value="Facility.Address" />
+    </div>
+    <div class="mb-2">
+        <InputText class="form-control" placeholder="Адрес" @bind-Value="Facility.Address" />
         <ValidationMessage For="@(() => Facility.Address)" />
     </div>
-    <div class="form-group col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4 d-flex flex-column justify-content-center">
-        <InputFile OnChange="@OnFileSelected" accept=".jpg,.png"/>
-        <img class="mt-2" src="@Facility.PreviewUrl"/>
+    <div class="mb-2 d-flex flex-column justify-content-center">
+        <InputFile class="form-control" OnChange="@OnFileSelected" accept=".jpg,.png" />
+        <img class="mt-2 img-thumbnail" src="@Facility.PreviewUrl" />
     </div>
-    <div class="form-group col">
-        <MatButton Raised="true" type="submit">Сохранить</MatButton>
+    <div>
+        <button type="submit" class="btn btn-primary">Сохранить</button>
     </div>
-</EditForm>
+</EditForm>  

@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using BlazorApp.Client.Extensions;
 using BlazorApp.Client.Models;
 using BlazorApp.Shared;
-using MatBlazor;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 
@@ -23,9 +22,6 @@ namespace BlazorApp.Client.Pages
         [Inject]
         protected NavigationManager NavigationManager { get; set; }
 
-        [Inject]
-        protected IMatToaster Toaster { get; set; }
-
         protected FacilityModel Facility = new FacilityModel();
 
         private CancellationTokenSource _cancellationTokenSource;
@@ -35,36 +31,45 @@ namespace BlazorApp.Client.Pages
             _cancellationTokenSource = new CancellationTokenSource();
         }
 
-        protected async Task HandleValidSubmit()
+        protected async Task OnSubmitAsync()
         {
-            var newFacilityDto = new NewFacilityDto
+            try
             {
-                Name = Facility.Name,
-                Address = Facility.Address
-            };
-
-            if (Facility.Picture != null)
-            {
-                var imageDto = new ImageDto
+                var newFacilityDto = new NewFacilityDto
                 {
-                    Name = Facility.Picture.Name,
-                    ContentType = Facility.Picture.ContentType,
-                    Content = await Facility.Picture.GetResizedImageAsync(1000, _cancellationTokenSource.Token)
+                    Name = Facility.Name,
+                    Address = Facility.Address
                 };
 
-                newFacilityDto.Image = imageDto;
-            }
+                if (Facility.Picture != null)
+                {
+                    var imageDto = new ImageDto
+                    {
+                        Name = Facility.Picture.Name,
+                        ContentType = Facility.Picture.ContentType,
+                        Content = await Facility.Picture.GetResizedImageAsync(1000, _cancellationTokenSource.Token)
+                    };
 
-            var result = await HttpClient.PostAsJsonAsync("/api/NewFacility", newFacilityDto);
-            if (!result.IsSuccessStatusCode)
-            {
-                Toaster.Add("Ошибка при сохранении", MatToastType.Danger);
+                    newFacilityDto.Image = imageDto;
+                }
+
+                var result = await HttpClient.PostAsJsonAsync("/api/NewFacility", newFacilityDto);
+                if (!result.IsSuccessStatusCode)
+                {
+                    
+                }
+                else
+                {
+                    
+                    
+                    NavigationManager.NavigateTo("dashboard");
+                }
             }
-            else
+            catch (Exception e)
             {
-                Toaster.Add("Объект сохранен", MatToastType.Success);
-                NavigationManager.NavigateTo("dashboard");
+                
             }
+            
         }
 
         protected async Task OnFileSelected(InputFileChangeEventArgs eventArgs)

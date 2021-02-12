@@ -1,6 +1,4 @@
 <CascadingAuthenticationState>
-    <MatPortalHost />
-    <MatToastContainer />
     <Router AppAssembly="@typeof(Program).Assembly">
         <Found Context="routeData">
             <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
@@ -10,7 +8,9 @@
                     <p>You may need to log in as a different user.</p>
                 </NotAuthorized>
                 <Authorizing>
-                    <MatProgressBar Indeterminate="true" />
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"/>
+                    </div>
                 </Authorizing>
             </AuthorizeRouteView>
         </Found>
@@ -24,9 +24,5 @@
 </CascadingAuthenticationState>
 @code
 { 
-    MatTheme mainTheme = new MatTheme()
-    {
-        Primary = MatThemeColors.Orange._500.Value,
-        Secondary = MatThemeColors.BlueGrey._500.Value
-    };
+
 }

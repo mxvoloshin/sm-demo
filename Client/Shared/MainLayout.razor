@@ -1,25 +1,24 @@
 ﻿@inherits LayoutComponentBase
 
-<AuthorizeView>
-    <Authorized>
-        <div class="sidebar">
-            <NavMenu/>
-        </div>
-    </Authorized>
-</AuthorizeView>
-
 <div class="main">
     <AuthorizeView>
         <Authorized>
-            <div class="top-row px-4">
-                @context.User.Identity.Name
-                <a href="/.auth/logout?post_logout_redirect_uri=/">
-                    <span class="oi oi-account-logout" aria-hidden="true"></span>
-                </a>
-            </div>
+            <NavBar />
         </Authorized>
     </AuthorizeView>
-    <div class="content px-4">
-        @Body
+    <div class="container-fluid">
+        <div class="row">
+            <AuthorizeView>
+                <Authorized>
+                    <SideBar />
+                </Authorized>
+            </AuthorizeView>
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                @Body
+            </main>
+        </div>
     </div>
 </div>
+
+
+
