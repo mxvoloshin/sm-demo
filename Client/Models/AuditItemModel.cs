@@ -13,5 +13,7 @@ namespace BlazorApp.Client.Models
         public string Title { get; set; }
         public bool IsCommentsAvailable { get; set; }
         public string Comments { get; set; }
+        public bool IsPhotoAvailable { get; set; }
+        public List<AuditItemPhotoModel> Photos { get; set; } = new();
     }
 }

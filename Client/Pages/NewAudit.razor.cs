@@ -74,10 +74,17 @@ namespace BlazorApp.Client.Pages
 
         }
 
-        protected async Task OnFileSelected(InputFileChangeEventArgs eventArgs)
+        protected async Task OnFileSelected(InputFileChangeEventArgs eventArgs, AuditItemModel auditItem)
         {
-            //Facility.Picture = eventArgs.File;
-            //Facility.PreviewUrl = await Facility.Picture.GetPreviewUrlAsync(300, _cancellationTokenSource.Token);
+            auditItem.Photos.Clear();
+            foreach (var file in eventArgs.GetMultipleFiles())
+            {
+                auditItem.Photos.Add(new AuditItemPhotoModel
+                {
+                    File = file,
+                    PreviewUrl = await file.GetPreviewUrlAsync(300, _cancellationTokenSource.Token)
+                });
+            }
         }
 
         public void Dispose()

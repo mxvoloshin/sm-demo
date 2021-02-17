@@ -48,6 +48,16 @@
                             {
                                 <InputTextArea class="form-control" rows="5" @bind-Value="@item.Comments"></InputTextArea>
                             }
+                            @if (item.IsPhotoAvailable)
+                            {
+                                <div class="mb-2 d-flex flex-column justify-content-center">
+                                    <InputFile class="form-control" OnChange="@((InputFileChangeEventArgs args) => OnFileSelected(args, item))" accept=".jpg,.png" multiple />
+                                    @foreach (var photo in item.Photos)
+                                    {
+                                        <img class="mt-2 img-thumbnail" src="@photo.PreviewUrl" />
+                                    }
+                                </div>
+                            }
                         }
                     </div>
                 </div>
