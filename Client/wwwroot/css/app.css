@@ -62,7 +62,7 @@ body {
  * Sidebar
  */
 
-.sidebar {
+.sidebar1 {
     position: fixed;
     top: 0;
     /* rtl:raw:
@@ -77,12 +77,12 @@ body {
 }
 
 @media (max-width: 767.98px) {
-    .sidebar {
+    .sidebar1 {
         top: 5rem;
     }
 }
 
-.sidebar-sticky {
+.sidebar1-sticky {
     position: relative;
     top: 0;
     height: calc(100vh - 48px);
