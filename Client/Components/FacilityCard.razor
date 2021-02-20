@@ -5,10 +5,15 @@
     <div class="card-body">
         <h5 class="card-title text-truncate">@Model.Name</h5>
         <p class="card-text text-truncate">@Model.Address</p>
-    </div>
-    <div class="card-body mx-auto">
-        <button type="button" class="btn btn-primary" @onclick="OnNewAudit">
-            Новый Аудит
-        </button>
+        <div class="text-center">
+            <button type="button" class="btn btn-primary" @onclick="OnNewAudit">
+                Аудит
+            </button>
+        </div>
+        <div class="mt-4 d-flex justify-content-between">
+            <a href="audits/@Model.Id" class="card-title">История</a>
+            <a href="#" class="card-title">Редактировать</a>
+            <a href="#" class="card-title">Удалить</a>
+        </div>
     </div>
 </div>

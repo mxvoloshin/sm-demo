@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using BlazorApp.Client.Extensions;
 using BlazorApp.Client.Models;
 using BlazorApp.Shared;
+using BlazorApp.Shared.Facility;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 

@@ -17,10 +17,11 @@ namespace BlazorApp.Api
         {
             builder.Services.AddScoped<ICloudStorageSettings, AppSettings>();
             builder.Services.AddScoped<IDateTimeService, DateTimeService>();
-
-            builder.Services.AddScoped<IFacilityRepository, FacilityRepository>();
             builder.Services.AddScoped<IBlobService, BlobService>();
             builder.Services.AddScoped<IImageProcessor, ImageProcessor>();
+
+            builder.Services.AddScoped<IFacilityRepository, FacilityRepository>();
+            builder.Services.AddScoped<IAuditRepository, AuditRepository>();
         }
     }
 }

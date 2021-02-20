@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Components.Web.Virtualization
+
 @inherits NewAuditBase;
 
 @page "/facility/{facilityId}/audit"
@@ -6,13 +7,13 @@
 
 <EditForm class="my-2" Model="@Audit" OnValidSubmit="@OnSubmitAsync" style="max-width: 600px">
     <DataAnnotationsValidator />
-
+    <CustomValidator @ref="customValidator" />
     <div class="row g-3 align-items-center">
         <div class="col-auto">
-            <label for="endAuditTime" class="col-form-label">Время начала аудита</label>
+            <label for="startAuditTime" class="col-form-label">Время начала аудита</label>
         </div>
         <div class="col-auto">
-            <input id="endAuditTime" class="form-control" type="time" value="@DateTime.Now.TimeOfDay" />
+            <input id="startAuditTime" class="form-control" type="time" @bind="Audit.StartTime" />
         </div>
     </div>
     <div class="accordion my-2" id="accordioItems">
@@ -33,10 +34,10 @@
                         {
                             @if (item.IsCheckedAvailable)
                             {
-                                var checkId = $"check_{item.Order}";
+                                var checkId = $"check_{group.Order}_{item.Order}";
                                 <div class="form-check form-control" style="border: 0">
-                                    <InputCheckbox class="form-check-input" id=checkId @bind-Value="@item.IsChecked"></InputCheckbox>
-                                    <label class="form-check-label" for=checkId>@item.Title</label>
+                                    <InputCheckbox class="form-check-input" id="@checkId" @bind-Value="@item.IsChecked"></InputCheckbox>
+                                    <label class="form-check-label" for="@checkId">@item.Title</label>
                                 </div>
                             }
                             else
@@ -69,8 +70,9 @@
             <label for="endAuditTime" class="col-form-label">Время окончания аудита</label>
         </div>
         <div class="col-auto">
-            <input id="endAuditTime" class="form-control" type="time" value="@DateTime.Now.TimeOfDay" />
+            <input id="endAuditTime" class="form-control" type="time" @bind="Audit.FinishTime" />
         </div>
     </div>
+    <ValidationSummary />
     <button type="submit" class="btn btn-primary">Сохранить</button>
 </EditForm>

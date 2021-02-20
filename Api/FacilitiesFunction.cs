@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BlazorApp.Api.Repository;
 using BlazorApp.Api.Services;
 using BlazorApp.Shared;
+using BlazorApp.Shared.Facility;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;

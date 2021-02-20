@@ -13,6 +13,7 @@ using BlazorApp.Api.Repository;
 using BlazorApp.Shared;
 using BlazorApp.Api.Entities;
 using BlazorApp.Api.Services;
+using BlazorApp.Shared.Facility;
 using Shared.ImageWrapper;
 
 namespace BlazorApp.Api

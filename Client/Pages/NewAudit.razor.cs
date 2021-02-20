@@ -5,10 +5,12 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using BlazorApp.Client.Components;
 using BlazorApp.Client.Extensions;
 using BlazorApp.Client.Models;
 using BlazorApp.Client.Service;
 using BlazorApp.Shared;
+using BlazorApp.Shared.Audit;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 
@@ -17,6 +19,7 @@ namespace BlazorApp.Client.Pages
     public class NewAuditBase : ComponentBase
     {
         private CancellationTokenSource _cancellationTokenSource;
+        protected CustomValidator customValidator;
         protected AuditModel Audit = new AuditModel(AuditItemFactory.CreateDefaultAuditGroups());
 
         [Inject]
@@ -33,39 +36,44 @@ namespace BlazorApp.Client.Pages
             _cancellationTokenSource = new CancellationTokenSource();
         }
 
+        protected override void OnParametersSet()
+        {
+            base.OnParametersSet();
+
+            Audit.FacilityId = FacilityId;
+        }
+
         protected async Task OnSubmitAsync()
         {
             try
             {
-                //var newFacilityDto = new NewFacilityDto
-                //{
-                //    Name = Facility.Name,
-                //    Address = Facility.Address
-                //};
+                customValidator.ClearErrors();
 
-                //if (Facility.Picture != null)
-                //{
-                //    var imageDto = new ImageDto
-                //    {
-                //        Name = Facility.Picture.Name,
-                //        ContentType = Facility.Picture.ContentType,
-                //        Content = await Facility.Picture.GetResizedImageAsync(1000, _cancellationTokenSource.Token)
-                //    };
+                var errors = new Dictionary<string, List<string>>();
 
-                //    newFacilityDto.Image = imageDto;
-                //}
+                if (Audit.FinishTime < Audit.StartTime)
+                {
+                    errors.Add(nameof(Audit.FinishTime),
+                        new List<string>() { "Время окончания аудита не может быть раньше времени начала" });
+                }
 
-                //var result = await HttpClient.PostAsJsonAsync("/api/NewFacility", newFacilityDto);
-                //if (!result.IsSuccessStatusCode)
-                //{
+                if (errors.Any())
+                {
+                    customValidator.DisplayErrors(errors);
+                    return;
+                }
+                
+                var newAuditDto = await BuildNewAuditDtoFromModelAsync(Audit);
 
-                //}
-                //else
-                //{
+                var result = await HttpClient.PostAsJsonAsync("/api/NewAudit", newAuditDto);
+                if (!result.IsSuccessStatusCode)
+                {
 
-
-                //    NavigationManager.NavigateTo("dashboard");
-                //}
+                }
+                else
+                {
+                    NavigationManager.NavigateTo("dashboard");
+                }
             }
             catch (Exception e)
             {
@@ -90,6 +98,56 @@ namespace BlazorApp.Client.Pages
         public void Dispose()
         {
             _cancellationTokenSource?.Dispose();
+        }
+
+        private async Task<NewAuditDto> BuildNewAuditDtoFromModelAsync(AuditModel model)
+        {
+            var newAuditDto = new NewAuditDto
+            {
+                FacilityId = model.FacilityId,
+                StartTimeUtc = model.StartTime.UtcDateTime,
+                FinishTimeUtc = model.FinishTime.UtcDateTime
+            };
+
+            foreach (var auditItemGroupModel in model.Groups)
+            {
+                var newAuditGroupDto = new AuditItemGroupDto
+                {
+                    Order = auditItemGroupModel.Order,
+                    Title = auditItemGroupModel.Title
+                };
+
+                foreach (var auditItemModel in auditItemGroupModel.Items)
+                {
+                    var auditItemDto = new AuditItemDto
+                    {
+                        Title = auditItemModel.Title,
+                        Order = auditItemModel.Order,
+                        IsCheckedAvailable = auditItemModel.IsCheckedAvailable,
+                        IsChecked = auditItemModel.IsChecked,
+                        IsCommentsAvailable = auditItemModel.IsCommentsAvailable,
+                        Comments = auditItemModel.Comments,
+                        IsPhotoAvailable = auditItemModel.IsPhotoAvailable
+                    };
+
+                    foreach (var auditItemPhotoModel in auditItemModel.Photos)
+                    {
+                        var imageDto = new ImageDto
+                        {
+                            Name = $"audit_{Guid.NewGuid()}",
+                            ContentType = auditItemPhotoModel.File.ContentType,
+                            Content = await auditItemPhotoModel.File.GetResizedImageAsync(1000, _cancellationTokenSource.Token)
+                        };
+
+                        auditItemDto.Photos.Add(imageDto);
+                    }
+
+                    newAuditGroupDto.Items.Add(auditItemDto);
+                }
+                newAuditDto.Groups.Add(newAuditGroupDto);
+            }
+
+            return newAuditDto;
         }
     }
 }

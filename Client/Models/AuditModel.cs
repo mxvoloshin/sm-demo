@@ -16,10 +16,10 @@ namespace BlazorApp.Client.Models
 
         public string Id { get; set; }
         public string FacilityId { get; set; }
-        [Required]
-        public TimeSpan StartTime { get; set; }
         [Required] 
-        public TimeSpan FinishTime { get; set; }
+        public DateTimeOffset StartTime { get; set; } = DateTimeOffset.Now;
+        [Required] 
+        public DateTimeOffset FinishTime { get; set; } = DateTimeOffset.Now;
         public IEnumerable<AuditItemGroupModel> Groups { get; } = Enumerable.Empty<AuditItemGroupModel>();
     }
 }
