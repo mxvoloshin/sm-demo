@@ -31,7 +31,7 @@ namespace BlazorApp.Api.Functions.Audit
                 return new NotFoundResult();
             }
 
-            var auditViewDto = new AuditViewDto
+            var auditViewDto = new AuditDto
             {
                 Id = audit.RowKey,
                 FacilityId = audit.FacilityId,

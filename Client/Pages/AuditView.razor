@@ -47,13 +47,13 @@ else
                         </p>
                     </div>
                 }
-                if (@item.PhotosPreview.Any())
+                if (@item.Photos.Any())
                 {
                     <div class="row col-md-6 g-2">
-                        @foreach (var itemPreview in item.PhotosPreview)
+                        @foreach (var photo in item.Photos)
                         {
                             <div class="col col-12">
-                                <img class="img-thumbnail" src="@itemPreview"/>
+                                <img class="img-thumbnail" src="@photo.PreviewUrl"/>
                             </div>
                         }
                     </div>

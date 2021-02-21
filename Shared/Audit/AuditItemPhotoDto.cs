@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Components.Forms;
+using System.Text;
 
-namespace BlazorApp.Client.Models
+namespace BlazorApp.Shared.Audit
 {
-    public class AuditItemPhotoModel
+    public class AuditItemPhotoDto
     {
         public string Name { get; set; }
-        public IBrowserFile File { get; set; }
         public string ContentType { get; set; }
         public byte[] Content { get; set; }
         public string PreviewUrl { get; set; }

@@ -6,6 +6,7 @@ namespace BlazorApp.Api.Services
 {
     public interface IBlobService
     {
+        Task RemoveBlobAsync(string blobName);
         Task<Uri> UploadImageAsync(ImageDto imageDto);
     }
 }

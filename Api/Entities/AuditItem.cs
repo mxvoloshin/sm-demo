@@ -11,6 +11,6 @@ namespace BlazorApp.Api.Entities
         public bool IsCommentsAvailable { get; set; }
         public string Comments { get; set; }
         public bool IsPhotoAvailable { get; set; }
-        public IList<string> PhotosPreview { get; set; } = new List<string>();
+        public IList<AuditItemPhoto> Photos { get; set; } = new List<AuditItemPhoto>();
     }
 }

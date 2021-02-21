@@ -18,6 +18,12 @@ namespace BlazorApp.Api.Services
             _blobContainerClient = service.GetBlobContainerClient("images");
         }
 
+        public async Task RemoveBlobAsync(string blobName)
+        {
+            var imagesBlob = _blobContainerClient.GetBlobClient(blobName);
+            await imagesBlob.DeleteAsync(DeleteSnapshotsOption.IncludeSnapshots);
+        }
+
         public async Task<Uri> UploadImageAsync(ImageDto imageDto)
         {
             var imagesBlob = _blobContainerClient.GetBlobClient(imageDto.Name);

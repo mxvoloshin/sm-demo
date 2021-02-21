@@ -13,7 +13,6 @@ namespace BlazorApp.Shared.Audit
         public bool IsCommentsAvailable { get; set; }
         public string Comments { get; set; }
         public bool IsPhotoAvailable { get; set; }
-        public IList<ImageDto> Photos { get; set; } = new List<ImageDto>();
-        public IList<string> PhotosPreview { get; set; } = new List<string>();
+        public IList<AuditItemPhotoDto> Photos { get; set; } = new List<AuditItemPhotoDto>();
     }
 }

@@ -1,0 +1,92 @@
+﻿@using Microsoft.AspNetCore.Components.Web.Virtualization
+
+@inherits AuditBase;
+
+@page "/facility/{facilityId}/audit"
+@page "/facility/{facilityId}/audit/{auditId}"
+
+@attribute [Authorize(Roles = "admin")]
+
+@if (Audit == null)
+{
+    <div class="progress">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+    </div>
+}
+else
+{
+    <EditForm class="my-2" Model="@Audit" OnValidSubmit="@OnSubmitAsync" style="max-width: 600px">
+        <DataAnnotationsValidator />
+        <CustomValidator @ref="customValidator" />
+        <div class="row g-3 align-items-center">
+            <div class="col-auto">
+                <label for="startAuditTime" class="col-form-label">Время начала аудита</label>
+            </div>
+            <div class="col-auto">
+                <input id="startAuditTime" class="form-control" type="time" @bind="Audit.StartTime" />
+            </div>
+        </div>
+        <div class="accordion my-2" id="accordioItems">
+            @foreach (var group in Audit.Groups.OrderBy(x => x.Order))
+            {
+                var headingItemId = $"headingItem{group.Order}";
+                var bodyItemId = $"bodyItem{group.Order}";
+                var isExpanded = group.Order == 1 ? "true" : "false";
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="@headingItemId">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#@bodyItemId" aria-expanded="@isExpanded" aria-controls="@bodyItemId">
+                            @group.Title
+                        </button>
+                    </h2>
+                    <div id="@bodyItemId" class="accordion-collapse collapse show" aria-labelledby="@headingItemId" data-bs-parent="#accordioItems">
+                        <div class="accordion-body">
+                            @foreach (var item in group.Items)
+                            {
+                                @if (item.IsCheckedAvailable)
+                                {
+                                    var checkId = $"check_{group.Order}_{item.Order}";
+                                    <div class="form-check form-control" style="border: 0">
+                                        <InputCheckbox class="form-check-input" id="@checkId" @bind-Value="@item.IsChecked"></InputCheckbox>
+                                        <label class="form-check-label" for="@checkId">@item.Title</label>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <label>@item.Title</label>
+                                }
+
+                                @if (item.IsCommentsAvailable)
+                                {
+                                    <InputTextArea class="form-control" rows="5" @bind-Value="@item.Comments"></InputTextArea>
+                                }
+                                @if (item.IsPhotoAvailable)
+                                {
+                                    <div class="mb-2 d-flex flex-column justify-content-center">
+                                        <InputFile class="form-control" OnChange="@((InputFileChangeEventArgs args) => OnFileSelected(args, item))" accept=".jpg,.png" multiple />
+                                        @foreach (var photo in item.Photos.Where(x=>!x.Removed))
+                                        {
+                                            <div class="d-flex position-relative mt-4">
+                                                <img class="img-thumbnail flex-fill" src="@photo.PreviewUrl" />
+                                                <i class="oi oi-circle-x size-md text-danger position-absolute top-0 start-100 translate-middle" @onclick="@(() => OnImageRemove(photo))"></i>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="row g-3 align-items-center mb-2">
+            <div class="col-auto">
+                <label for="endAuditTime" class="col-form-label">Время окончания аудита</label>
+            </div>
+            <div class="col-auto">
+                <input id="endAuditTime" class="form-control" type="time" @bind="Audit.FinishTime" />
+            </div>
+        </div>
+        <ValidationSummary />
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+    </EditForm>
+}

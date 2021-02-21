@@ -6,6 +6,6 @@ namespace BlazorApp.Api.Entities
     {
         public ushort Order { get; set; }
         public string Title { get; set; }
-        public IList<AuditItem> Items { get; } = new List<AuditItem>();
+        public IList<AuditItem> Items { get; set; } = new List<AuditItem>();
     }
 }

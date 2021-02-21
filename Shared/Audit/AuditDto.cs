@@ -4,11 +4,12 @@ using System.Linq;
 
 namespace BlazorApp.Shared.Audit
 {
-    public class NewAuditDto
+    public class AuditDto
     {
+        public string Id { get; set; }
         public string FacilityId { get; set; }
-        public DateTime StartTimeUtc { get; set; }
-        public DateTime FinishTimeUtc { get; set; }
+        public DateTimeOffset StartTimeUtc { get; set; }
+        public DateTimeOffset FinishTimeUtc { get; set; }
         public IList<AuditItemGroupDto> Groups { get; set; } = new List<AuditItemGroupDto>();
     }
 }

@@ -1,7 +1,7 @@
 ﻿@using System.Globalization
 @inherits AuditsBase
 
-@page "/audits/{FacilityId}"
+@page "/facilities/{FacilityId}/audits"
 @attribute [Authorize(Roles = "admin")]
 
 @if (Audits == null)
@@ -27,7 +27,7 @@ else
             <tr>
                 <th scope="row">
                     <span>
-                        <a href="auditedit/@audit.Id" class="btn btn-light oi oi-pencil" />
+                        <a href="facility/@audit.FacilityId/audit/@audit.Id" class="btn btn-light oi oi-pencil" />
                     </span>
                     <span>
                         <a href="auditview/@audit.Id" class="btn btn-light oi oi-eye" />
